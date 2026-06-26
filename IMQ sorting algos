@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+using namespace std;
+void insertionSort(vector<int> &a)
+{
+    for (int i = 1; i < a.size(); i++)
+    {
+        int key = a[i];
+        int j = i - 1;
+        while (j >= 0 && a[j] > key)
+        {
+            a[j + 1] = a[j];
+            j--;
+        }
+        a[j + 1] = key;
+    }
+}
+int partition(vector<int> &a, int low, int high)
+{
+    int pivot = a[high];
+    int i = low;
+    int j = high-1;
+    while (true)
+    {
+        while (i <= j && a[i] <= pivot)
+            i++;
+        while (a[j] > pivot)
+            j--;
+        if (i >= j)
+            break;
+        swap(a[i], a[j]);
+    }
+    swap(a[high], a[i]);
+    return i;
+}
+void quickSort(vector<int> &a, int low, int high)
+{
+    if (low < high)
+    {
+        int pi = partition(a, low, high);
+        quickSort(a, low, pi - 1);
+        quickSort(a, pi + 1, high);
+    }
+}
+void merge(vector<int> &a, int low, int mid, int high)
+{
+    vector<int> left(a.begin() + low, a.begin() + mid + 1);
+    vector<int> right(a.begin() + mid + 1, a.begin() + high + 1);
+    int i = 0;
+    int j = 0, k = low;
+    while (i < left.size() && j < right.size())
+    {
+        if (left[i] <= right[j])
+            a[k++] = left[i++];
+        else
+            a[k++] = right[j++];
+    }
+    if (i < left.size())
+        a[k++] = left[i++];
+    if (j < right.size())
+        a[k++] = right[j++];
+}
+void mergeSort(vector<int> &a, int low, int high)
+{
+    if (low >= high)
+        return;
+    int m = (low + high) / 2;
+    mergeSort(a, low, m);
+    mergeSort(a, m + 1, high);
+    merge(a, low, m, high);
+}
+int main()
+{
+    vector<int> vec = {5, 3, 9, 4, 2, 7};
+     quickSort(vec, 0, vec.size() - 1);
+    // mergeSort(vec,0,vec.size()-1);
+    //insertionSort(vec);
+    for (int x : vec)
+        cout << x << " ";
+    return 0;
+}
